@@ -12,7 +12,7 @@ std::vector<int> randomData(int size)
 	std::vector<int> *data = new std::vector<int>[size];
 	for (int i = 0; i < size; i++)
 	{
-		data->push_back((rand() % INT_MAX) - floor(INT_MAX / 2));
+		data->push_back((rand() % 100000) - 50000);
 	}
 	return *data;
 }
@@ -20,8 +20,8 @@ std::vector<int> randomData(int size)
 
 std::vector<int> getTestData()
 {
-    return randomData(10000);
-    // return { 11,102,1,13,25,18,20,7,8,6,103,3,1 }; /// Można modyfikować
+    // return randomData(10000);
+    return { 11,102,1,13,25,18,20,7,8,6,103,3,1 }; /// Można modyfikować
 }
 
 std::vector<int> getSortedData()

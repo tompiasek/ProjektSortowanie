@@ -1,103 +1,40 @@
-﻿// quicksort
+﻿ // quicksort
 
 template <typename T>
 class QuickSort
 {
 public:
-    void sort(typename std::vector<T>::iterator start, typename std::vector<T>::iterator end)
-    {
-        if (start == end) return;
-        // Wyświetlanie danych
-        /*std::cout << "Start: " << *start << " End: " << *std::prev(end) << std::endl;
-        std::cout << "Data: ";
-        for (typename std::vector<T>::iterator it = start; it != end; it++) {
-			std::cout << *it << " ";
-		}
-        std::cout << std::endl;*/
-        // Działanie algorytmu
-        if (start <= end) {
-            typename std::vector<T>::iterator pivot = part(start, end);
-            sort(start, pivot);
-            sort(++start, end);
-        }
-    }
-    
-private:
-    typename std::vector<T>::iterator part(typename std::vector<T>::iterator low, typename std::vector<T>::iterator high)
-    {
-        T pivot = *low;
-        typename std::vector<T>::iterator i = low;
-        typename std::vector<T>::iterator j = std::prev(high);
-        while (i < j) {
-            while (*i < pivot) {
-                if (++i == high) return i;
-            }
-            while (*j >= pivot) {
-                if (--j == low) return i;
-            }
-            swap(i, j);
-            if (++i == j--) return i;
-        }
-        return i;
-    }
-    void swap(typename std::vector<T>::iterator a, typename std::vector<T>::iterator b)
-    {
-        T temp = *a;
-        *a = *b;
-        *b = temp;
-    }
-};
+    // Recursive quicksort implementation
+    void sort(typename std::vector<T>::iterator start, typename std::vector<T>::iterator end) {
+        if (std::distance(start, end) <= 1)
+            return; // Base case: vector size is 0 or 1
 
+        // Choose pivot (preferably middle element)
+        typename std::vector<T>::iterator pivot = choosePivot(start, end);
 
-template <typename T>
-class QuickSort
-{
-public:
-    void sort(typename std::vector<T>::iterator start, typename std::vector<T>::iterator end)
-    {
-        while (start != end)
-        {
-            // Działanie algorytmu
-            if (start <= end)
-            {
-                typename std::vector<T>::iterator pivot = part(start, end);
-                sort(start, pivot);
-                start = ++pivot;
-            }
-            else
-            {
-                --start;
-                end = start;
-            }
-        }
+        // Partition the vector
+        typename std::vector<T>::iterator bound = part(start, end, pivot);
+
+        // Recursively sort the sub-vectors
+        sort(start, bound);
+        sort(bound + 1, end);
     }
 
 private:
-    typename std::vector<T>::iterator part(typename std::vector<T>::iterator low, typename std::vector<T>::iterator high)
-    {
-        T pivot = *low;
-        typename std::vector<T>::iterator i = low;
-        typename std::vector<T>::iterator j = std::prev(high);
-        while (i < j)
-        {
-            while (*i < pivot)
-            {
-                if (++i == high) return i;
-            }
-            while (*j >= pivot)
-            {
-                if (--j == low) return i;
-            }
-            swap(i, j);
-            if (++i == j--) return i;
-        }
-        return i;
+
+    // Choose pivot (middle element)
+    typename std::vector<T>::iterator choosePivot(typename std::vector<T>::iterator start, typename std::vector<T>::iterator end) {
+        return std::prev(end, 1); // Choose the last element as pivot
     }
 
-    void swap(typename std::vector<T>::iterator a, typename std::vector<T>::iterator b)
-    {
-        T temp = *a;
-        *a = *b;
-        *b = temp;
+    // Partition the vector
+    typename std::vector<T>::iterator part(typename std::vector<T>::iterator start, typename std::vector<T>::iterator end, typename std::vector<T>::iterator pivot) {
+        auto i = start;
+        for (auto j = start; j != pivot; ++j) {
+            if (*j < *pivot)
+                std::swap(*i++, *j);
+        }
+        std::swap(*i, *pivot);
+        return i;
     }
 };
