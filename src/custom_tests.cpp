@@ -2,12 +2,26 @@
 #include "catch2/catch.hpp"
 
 #include <vector>
+#include <ctime>
 #include "algorithms/quicksort.h"
+
+
+std::vector<int> randomData(int size)
+{
+    srand(time(NULL));
+	std::vector<int> *data = new std::vector<int>[size];
+	for (int i = 0; i < size; i++)
+	{
+		data->push_back((rand() % INT_MAX) - floor(INT_MAX / 2));
+	}
+	return *data;
+}
 
 
 std::vector<int> getTestData()
 {
-    return { 11,102,1,13,25,18,20,7,8,6,103,3,1 }; /// Można modyfikować
+    return randomData(10000);
+    // return { 11,102,1,13,25,18,20,7,8,6,103,3,1 }; /// Można modyfikować
 }
 
 std::vector<int> getSortedData()
@@ -27,15 +41,8 @@ TEST_CASE("QuickSort")
     auto data = getTestData();
     auto resultData = getSortedData();
 
-    std::cout << "Data: ";
-    for (auto i : data)
-	{
-		std::cout << i << " ";
-	}
     QuickSort<int> quickSort;
-    std::cout << "\nQuicksort start\n";
     quickSort.sort(data.begin(), data.end());
-    std::cout << "\nQuicksort end\n";
 
     REQUIRE(data == resultData);
 }
