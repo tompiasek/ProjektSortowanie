@@ -8,7 +8,7 @@ class QuickSort
 
 public:
     // Recursive quicksort implementation
-    void sort(typename std::vector<T>::iterator start, typename std::vector<T>::iterator end) {
+    void sort(it start, it end) {
         if (start < end) {
 			auto q = part(start, end);
             if (q != start) sort(start, q - 1);
@@ -19,7 +19,7 @@ public:
 private:
 
     // Choose pivot (middle element)
-    typename std::vector<T>::iterator choosePivot(typename std::vector<T>::iterator start, typename std::vector<T>::iterator end) {
+    it choosePivot(it start, it end) {
     	// return start + (end - start) / 2;
 
         std::vector<T>::iterator mid = start + (end - start) / 2;
@@ -31,7 +31,7 @@ private:
     }
 
     // Partition the array
-    typename std::vector<T>::iterator part(typename std::vector<T>::iterator start, typename std::vector<T>::iterator end) {
+    it part(it start, it end) {
         auto partIdx = start;
         auto pivot = end;
 
@@ -47,7 +47,7 @@ private:
 	}
 
     // Swap two elements
-	void swap(typename std::vector<T>::iterator a, typename std::vector<T>::iterator b) {
+	void swap(it a, it b) {
 		T temp = *a;
 		*a = *b;
 		*b = temp;
