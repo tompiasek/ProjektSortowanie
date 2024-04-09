@@ -21,7 +21,7 @@ std::vector<int> randomData(int size)
 
 std::vector<int> getTestData()
 {
-    return randomData(1000);
+    return randomData(500000);
     // return { -1,2,3,9,8,7,4,127,-23,67,0,11,13,11,102,1,13,25,18,20,7,8,6,103,3,1 }; /// Można modyfikować
     //return { 9,2,-3,6,1,10,8,-2,1,2,20,1,0,1,0,10 };
 }
@@ -78,6 +78,7 @@ bool requireArraysEqual(const std::vector<T> expected, const std::vector<T> actu
 //    REQUIRE(sorted == data);
 //}
 
+
 TEST_CASE("QuickSort 100 TIMES")
 {
     // Initialize variables
@@ -93,12 +94,12 @@ TEST_CASE("QuickSort 100 TIMES")
 	{
 		// Get test data
 		auto data = getTestData();
-        auto reversed = getReversedData(data);
+        // auto reversed = getReversedData(data);
 
 
         // Sort the data and measure time
         start = std::chrono::high_resolution_clock::now();
-		quickSort.sort(reversed.begin(), std::prev(reversed.end()));
+		quickSort.sort(data.begin(), std::prev(data.end()));
         end = std::chrono::high_resolution_clock::now();
         if (i > 0) {
             time += std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
@@ -106,9 +107,12 @@ TEST_CASE("QuickSort 100 TIMES")
         } else {
             time = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
 		}
+        system("cls");
+        std::cout << i + 1 << "%\n";
+        std::cout << "Time: " << time << " microseconds\n";
 
         // Check if the data is sorted
-        if (arraysAreEqual(getSortedData(data), reversed)) {
+        if (arraysAreEqual(getSortedData(data), data)) {
             ++successCount;
         } else {
             std::cout << "TEST " << i << " FAILED" << std::endl;
