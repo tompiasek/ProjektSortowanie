@@ -5,6 +5,8 @@
 #include <ctime>
 #include <chrono>
 #include "algorithms/quicksort.h"
+#include "algorithms/mergesort.h"
+#include "algorithms/heapsort.h"
 
 
 std::vector<int> randomData(int size)
@@ -21,7 +23,7 @@ std::vector<int> randomData(int size)
 
 std::vector<int> getTestData()
 {
-    return randomData(1000000);
+    return randomData(10000);
     // return { -1,2,3,9,8,7,4,127,-23,67,0,11,13,11,102,1,13,25,18,20,7,8,6,103,3,1 }; /// Można modyfikować
     //return { 9,2,-3,6,1,10,8,-2,1,2,20,1,0,1,0,10 };
 }
@@ -31,7 +33,7 @@ std::vector<int> getSortedData(std::vector<int> data) {
     return data;
 }
 
-std::vector<int> getPartSortedData(std::vector<int> data, int percent) {
+std::vector<int> getPartSortedData(std::vector<int> data, float percent) {
     std::sort(data.begin(), data.begin() + data.size() * percent / 100);
 	return data;
 }
@@ -84,7 +86,62 @@ bool requireArraysEqual(const std::vector<T> expected, const std::vector<T> actu
 //}
 
 
-TEST_CASE("QuickSort 100 TIMES")
+
+//TEST_CASE("QuickSort 100 TIMES")
+//{
+//    // Initialize variables
+//    int successCount = 0;
+//    int failCount = 0;
+//
+//    long time;
+//    std::chrono::steady_clock::time_point start, end;
+//    QuickSort<int> quickSort;
+//
+//    // Run tests
+//    for(int i = 0; i < 100; i++)
+//	{
+//		// Get test data
+//		auto data = getTestData();
+//        //data = getPartSortedData(data, 99.7);
+//        auto reversed = getReversedData(data);
+//
+//
+//        // Sort the data and measure time
+//        start = std::chrono::high_resolution_clock::now();
+//		quickSort.sort(reversed.begin(), std::prev(reversed.end()));
+//        end = std::chrono::high_resolution_clock::now();
+//        if (i > 0) {
+//            time *= i;
+//            time += std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+//            time /= i + 1;
+//        } else {
+//            time = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+//		}
+//        system("cls");
+//        std::cout << i + 1 << "%\n";
+//        std::cout << "Time: " << time << " miliseconds\n";
+//        auto timeLeft = (100 - i - 1) * time / 1000000;
+//        std::cout << "Remaining time: " << timeLeft / 60 << ":" << timeLeft % 60 << "min\n";
+//
+//        // Check if the data is sorted
+//        if (arraysAreEqual(reversed, getSortedData(data))) {
+//            ++successCount;
+//        } else {
+//            std::cout << "TEST " << i << " FAILED" << std::endl;
+//			++failCount;
+//		}
+//	}
+//
+//    std::cout << "Average time: " << time << " microseconds" << std::endl;
+//    
+//    INFO("Tests passed: " << successCount);
+//    INFO("Tests failed: " << failCount);
+//
+//    REQUIRE(failCount == 0);
+//}
+
+
+TEST_CASE("MergeSort 100 TIMES")
 {
     // Initialize variables
     int successCount = 0;
@@ -92,28 +149,29 @@ TEST_CASE("QuickSort 100 TIMES")
 
     long time;
     std::chrono::steady_clock::time_point start, end;
-    QuickSort<int> quickSort;
+    MergeSort<int> mergesort;
 
     // Run tests
-    for(int i = 0; i < 100; i++)
-	{
-		// Get test data
-		auto data = getTestData();
-        data = getPartSortedData(data, 50);
-        // auto reversed = getReversedData(data);
+    for (int i = 0; i < 100; i++)
+    {
+        // Get test data
+        auto data = getTestData();
+        data = getPartSortedData(data, 25);
+        //auto reversed = getReversedData(data);
 
 
         // Sort the data and measure time
         start = std::chrono::high_resolution_clock::now();
-		quickSort.sort(data.begin(), std::prev(data.end()));
+        mergesort.sort(data.begin(), data.end());
         end = std::chrono::high_resolution_clock::now();
         if (i > 0) {
             time *= i;
             time += std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
             time /= i + 1;
-        } else {
+        }
+        else {
             time = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
-		}
+        }
         system("cls");
         std::cout << i + 1 << "%\n";
         std::cout << "Time: " << time << " microseconds\n";
@@ -123,17 +181,73 @@ TEST_CASE("QuickSort 100 TIMES")
         // Check if the data is sorted
         if (arraysAreEqual(data, getSortedData(data))) {
             ++successCount;
-        } else {
+        }
+        else {
             std::cout << "TEST " << i << " FAILED" << std::endl;
-			++failCount;
-		}
-	}
+            ++failCount;
+        }
+    }
 
     std::cout << "Average time: " << time << " microseconds" << std::endl;
-    
+
     INFO("Tests passed: " << successCount);
     INFO("Tests failed: " << failCount);
 
     REQUIRE(failCount == 0);
 }
 
+
+//TEST_CASE("HeapSort 100 TIMES")
+//{
+//    // Initialize variables
+//    int successCount = 0;
+//    int failCount = 0;
+//
+//    long time;
+//    std::chrono::steady_clock::time_point start, end;
+//    HeapSort<int> heapSort;
+//
+//    // Run tests
+//    for (int i = 0; i < 100; i++)
+//    {
+//        // Get test data
+//        auto data = getTestData();
+//        //data = getPartSortedData(data, 99.7);
+//        //auto reversed = getReversedData(data);
+//
+//
+//        // Sort the data and measure time
+//        start = std::chrono::high_resolution_clock::now();
+//        heapSort.sort(data.begin(), data.end());
+//        end = std::chrono::high_resolution_clock::now();
+//        if (i > 0) {
+//            time *= i;
+//            time += std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+//            time /= i + 1;
+//        }
+//        else {
+//            time = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+//        }
+//        system("cls");
+//        std::cout << i + 1 << "%\n";
+//        std::cout << "Time: " << time << " microseconds\n";
+//        auto timeLeft = (100 - i - 1) * time / 1000000;
+//        std::cout << "Remaining time: " << timeLeft / 60 << ":" << timeLeft % 60 << "min\n";
+//
+//        // Check if the data is sorted
+//        if (arraysAreEqual(data, getSortedData(data))) {
+//            ++successCount;
+//        }
+//        else {
+//            std::cout << "TEST " << i << " FAILED" << std::endl;
+//            ++failCount;
+//        }
+//    }
+//
+//    std::cout << "Average time: " << time << " microseconds" << std::endl;
+//
+//    INFO("Tests passed: " << successCount);
+//    INFO("Tests failed: " << failCount);
+//
+//    REQUIRE(failCount == 0);
+//}

@@ -1,4 +1,9 @@
-﻿//  quicksort
+﻿#ifndef SORTING_ALGORITHMS_QUICKSORT_H
+#define SORTING_ALGORITHMS_QUICKSORT_H
+#include <vector>
+#include <iterator>
+
+//  quicksort
 #include <functional>
 
 
@@ -67,3 +72,5 @@ private:
 		*b = temp;
 	}
 };
+
+#endif //SORTING_ALGORITHMS_QUICKSORT_H
